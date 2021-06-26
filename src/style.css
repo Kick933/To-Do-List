@@ -1,17 +1,45 @@
 body{
-    background-color: #eeeeee;
-    color: #333333;
+    background-color: #333333;
+    color: #eeeeee;
+}
+.navBarChild{
+    width: 50% !important;
+}
+.rowFlex{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 #topBar{
-    position: fixed;
+    position: relative;
+    z-index:999;
     top:0;
     left:0;
     right:0;
-    height: 2rem;
+    height: auto;
     width: 100%;
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
+    align-items:center;
     flex-wrap:wrap;
     background-color: #333333;
-    color:#eeeeee;
+    filter: brightness(0.9);
+}
+#pageWrapper{
+    width: 100%;
+}
+.hidden{
+    display: none;
+}
+.centered{
+    margin: 0 auto;
+}
+#sidePane{
+    position: fixed;
+    backgorund-color: #eeeeeec5;
+    right: 0;
+    width: 30vw;
+    height: 100%;
+    text-align: center;
 }
