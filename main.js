@@ -1,1 +1,0 @@
-document.getElementsByTagName("BODY")[0];
