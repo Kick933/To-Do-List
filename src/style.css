@@ -21,17 +21,39 @@ body{
     justify-content: flex-start;
     align-items: center;
 }
-#addProject{
-    font-size: 2rem;
-    background: #ec8b8b;
-    border: none;
-    width: 60%;
-    font-weight: 600;
-    color: rgb(78, 76, 76);
-    border-radius: 5px;
+#rightPane{
+    padding: 5% 2% 5% 2%;
+    background-color: #61676b;
+    left:0;
+    width: 20vw;
+    height: 100vh;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
 }
-#project-container{
+.flexEnd{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333333;
     width: 100%;
-    font-size: 3rem;
-    background-color: #444a4d;
+    padding: 5%;
+    border-radius: 10px;
+    margin-bottom: 5%;
+} 
+.flexEnd:hover{
+    outline: 2px solid whitesmoke;
+}
+.enclosedIMG{
+    height: 1rem;
+    width: 1rem;
+}
+.flex{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }
