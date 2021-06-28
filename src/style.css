@@ -2,44 +2,36 @@ body{
     background-color: #333333;
     color: #eeeeee;
 }
-.navBarChild{
-    width: 50% !important;
-}
-.rowFlex{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-#topBar{
-    position: relative;
-    z-index:999;
-    top:0;
-    left:0;
-    right:0;
-    height: auto;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items:center;
-    flex-wrap:wrap;
-    background-color: #333333;
-    filter: brightness(0.9);
-}
-#pageWrapper{
-    width: 100%;
-}
-.hidden{
-    display: none;
-}
-.centered{
-    margin: 0 auto;
-}
-#sidePane{
+#wrapper{
     position: fixed;
-    backgorund-color: #eeeeeec5;
-    right: 0;
-    width: 30vw;
-    height: 100%;
-    text-align: center;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right:0;
+}
+#leftPane{
+    padding: 5% 2% 5% 2%;
+    background-color: #373c3f;
+    left:0;
+    width: 20vw;
+    height: 100vh;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+#addProject{
+    font-size: 2rem;
+    background: #ec8b8b;
+    border: none;
+    width: 60%;
+    font-weight: 600;
+    color: rgb(78, 76, 76);
+    border-radius: 5px;
+}
+#project-container{
+    width: 100%;
+    font-size: 3rem;
+    background-color: #444a4d;
 }
