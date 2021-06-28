@@ -2,6 +2,7 @@
 // No event handler used inside here.
 import './style.css'
 import drop from './Images/drop.png';
+import add from './Images/add.png';
 
 function staticDOMconstructor(){
     const body = document.getElementsByTagName("BODY")[0];
@@ -55,14 +56,17 @@ function staticDOMconstructor(){
     dueWeek.appendChild(textWeek);
     dueWeek.appendChild(numThisWeek);
     leftPane.appendChild(dueWeek);
-
+    // Creates Proejcts flex for projects display.
+    const displayProjects = document.createElement('div');
+    displayProjects.classList.add('flexColumn');
+    displayProjects.id = "projectDisplay";
     // Creates Projects option.
     const optionProject = document.createElement('div');
     optionProject.classList.add('flexEnd');
     const textProject = document.createElement('div');
     textProject.innerText = "Projects";
     const container1 = document.createElement('div');
-    container1.classList.add('flex');
+    container1.classList.add('flexRow');
     const numProject = document.createElement('div');
     numProject.innerText = `${totalProjects}`;
     const dropdown = new Image();
@@ -71,8 +75,21 @@ function staticDOMconstructor(){
     optionProject.appendChild(textProject);
     container1.appendChild(numProject);
     container1.appendChild(dropdown);
-    optionProject.appendChild(container1)
+    optionProject.appendChild(container1);
     leftPane.appendChild(optionProject);
+    // Create add button inside displayProjects.
+    const addProject = document.createElement('div');
+    addProject.classList.add('flexEnd');
+    const textAddProject = document.createElement('div');
+    textAddProject.innerText = "Add Project";
+    const addBtn = new Image();
+    addBtn.src = add;
+    addBtn.classList.add('enclosedIMG');
+    addProject.appendChild(textAddProject);
+    addProject.appendChild(addBtn);
+    // Adds add Projects Button to displayProjects.
+    displayProjects.appendChild(addProject);
+    leftPane.appendChild(displayProjects);
     
 
     // Creates Right Pane.
