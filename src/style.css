@@ -2,54 +2,24 @@ body{
     background-color: #333333;
     color: #eeeeee;
 }
+.enclosedIMG{
+    height: 1.5rem;
+    width: 1.5rem;
+    padding: 1px;
+    display: inline-block;
+}
+.enclosedIMG:hover{
+    background-color: rgba(128, 128, 128, 0.493);
+    outline: 1px whitesmoke solid;
+}
 #wrapper{
     position: fixed;
+    display: flex;
+    flex-direction: row;
     top:0;
     bottom: 0;
     left: 0;
     right:0;
-}
-#leftPane{
-    padding: 5% 2% 5% 2%;
-    background-color: #373c3f;
-    left:0;
-    width: 20vw;
-    height: 100vh;
-    overflow: auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-}
-#rightPane{
-    padding: 5% 2% 5% 2%;
-    background-color: #61676b;
-    left:0;
-    width: 20vw;
-    height: 100vh;
-    overflow: auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-}
-.flexEnd{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #333333;
-    width: 100%;
-    padding: 5%;
-    border-radius: 10px;
-    margin-bottom: 5%;
-} 
-.flexEnd:hover,.flexRow:hover{
-    outline: 2px solid whitesmoke;
-}
-.enclosedIMG{
-    height: 1rem;
-    width: 1rem;
 }
 .flexRow{
     display: flex;
@@ -64,9 +34,118 @@ body{
     justify-content: center;
     align-items: flex-start;
 }
-.projects{
+#leftPane{
+    padding: 3%;
+    background-color: #373c3f;
+    left:0;
+    width: 20vw;
+    height: 100vh;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+#leftPane .flexEnd:hover{
+    outline: 2px solid whitesmoke;
+}
+#leftPane .flexEnd{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333333;
+    width: 100%;
+    padding: 5%;
+    border-radius: 10px;
+    margin-bottom: 5%;
+} 
+#rightPane{
+    padding: 2% 5% 5% 5%;
+    background-color: #61676b;
+    color: whitesmoke;
+    right:0;
+    width: 80vw;
+    height: 100%;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+#rightPane .flexStretch{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+#rightPane .projects{
     outline: 1px solid silver;
 }
-.projects:hover{
+#rightPane .projects:hover{
     outline: 1px solid gold;
+}
+#rightPane .projectDetail{
+    text-align: left;
+    align-self: flex-start;
+}
+#rightPane h1{
+    margin: 0;
+}
+#rightPane .flexEnd{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    width: 50%;
+}
+#projectTitle{
+    color: gold;
+    font-family: cursive;
+    font-size: 4rem;
+}
+#projectDescription{
+    margin: 0;
+}
+#taskContainer{
+    width: 90%;
+    height: 100%;
+    overflow: auto;
+    margin-top: 2rem;
+}
+.individualTaskContainer{
+    display: flex;
+    flex-direction: column;
+    background: black;
+    border-radius: 20px;
+    padding: 0 5% 0 5%;
+}
+.taskName{
+    color: orange;
+    font-family: cursive;
+    font-size: 2rem;
+}
+#rightPane .flexColumn{
+    display:flex;
+    flex-direction: column;
+}
+.flexColumn h2{
+    margin: 0;
+}
+#rightPane .flexAround{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 50%;
+}
+.taskDetail{
+    background-color: grey;
+    color: honeydew;
+    width: 95%;
+    padding: 1%;
+    border-radius: 20px;
+    text-overflow: auto;
+   word-wrap:break-word;
 }
