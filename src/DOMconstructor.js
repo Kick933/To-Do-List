@@ -6,12 +6,19 @@ import add from './Images/add.png';
 import edit from './Images/edit.png';
 import deleteIMG from './Images/delete.png';
 import { storeArray, getFromLocalStorage } from './storageHandler.js';
-let projectBeingDisplayed;
+let projectBeingDisplayed = 0;
 let indexOfProjectDisplayed;
-let finalArray = getFromLocalStorage();
+let finalArray = [];
+finalArray = getFromLocalStorage();
+
+// Project object Constructor.
+function projectConstructor(title,describe){
+    this.title = title;
+    this.describe = describe;
+    this.tasks = [];
+}
 function DOMconstructor(){
     const body = document.getElementsByTagName("BODY")[0];
-    let selectedProject;
     // Creates Page Wrapper.
     const pageWrapper = document.createElement("div");
     pageWrapper.id = 'wrapper';
@@ -28,6 +35,8 @@ function DOMconstructor(){
 
     //Append pageWrapper to body;
     body.appendChild(pageWrapper);
+    // updates locally stored data.
+    storeArray(finalArray);
 }
 
 // Function to construct left Pane.
@@ -103,6 +112,9 @@ function leftPaneConstructor(projectArray){
      leftPane.appendChild(optionProject);
      // Create add button inside displayProjects.
      const addProject = document.createElement('div');
+     addProject.addEventListener('click',()=>{
+         addNewProject();
+     })
      addProject.classList.add('flexEnd');
      const textAddProject = document.createElement('div');
      textAddProject.innerText = "Add Project";
@@ -121,8 +133,8 @@ function leftPaneConstructor(projectArray){
 }
 // Takes getFromLocalStorage as argument.
 function rightPaneConstructor(project){
-    console.log(project);
     const rightPane = document.createElement('div');
+    console.log(project);
     rightPane.id='rightPane';
     rightPane.innerHTML = "";
 
@@ -139,6 +151,19 @@ function rightPaneConstructor(project){
     heading.id="projectTitle";
     headingpart.appendChild(heading);
     const editIMG = new Image();
+    if(projectBeingDisplayed=={
+        title : "Select a project.",
+        description : "Project Description will be shown here.",
+        tasks : []
+     } || projectBeingDisplayed =={
+        title : "No Projects in task List",
+        description : "Create a Project to add tasks under it.",
+        tasks : []
+    }){
+        editIMG.classList.add('hidden');
+    }else{
+        editIMG.classList.remove('hidden');
+    }
     editIMG.src = edit
     editIMG.classList.add("enclosedIMG");
     headingpart.appendChild(editIMG);
@@ -166,9 +191,22 @@ function createTaskDOM(arg){
 
     const addTask = document.createElement('button');
     addTask.innerText = "Add Task";
+    if(projectBeingDisplayed=={
+        title : "Select a project.",
+        description : "Project Description will be shown here.",
+        tasks : []
+     } || projectBeingDisplayed =={
+        title : "No Projects in task List",
+        description : "Create a Project to add tasks under it.",
+        tasks : []
+    }){
+        addTask.classList.add('hidden');
+    }else{
+        addTask.classList.remove('hidden');
+    }
     addTask.id="addTaskBtn";
     addTask.addEventListener('click', ()=>{
-        addNewTask();
+        addNewTask(arg);
     })
     taskContainer.appendChild(addTask);
     for(let i = 0; i< arg.length ; i++){
@@ -236,9 +274,9 @@ function createTaskDOM(arg){
 
 function deleteTask(i){
     finalArray[indexOfProjectDisplayed].tasks.splice(i,1);
-    storeArray(finalArray);
     DOMconstructor();
 }
+// Also used for addition of the task to project.
 function editTaskDOM(i){
     const individualContainer =  document.getElementById(`task${i}`);
     individualContainer.innerHTML = "";
@@ -311,22 +349,86 @@ function createProjectDOM(arg){
         deleteBtn.src = deleteIMG;
         deleteBtn.addEventListener('click',()=>{
             event.stopPropagation();
-            deleteproject(i);
+            deleteProject(i);
         });
-        if(i==0){
-            // Appending Right Pane to pageWrapper.
+        if(projectBeingDisplayed == 0){
+            // By Default
             projectBeingDisplayed = arg[i];
             indexOfProjectDisplayed = i;
         }
         project.addEventListener('click',()=>{
             projectBeingDisplayed = arg[i];
             indexOfProjectDisplayed = i;
+            DOMconstructor();
         })
         project.appendChild(projectName);
         project.appendChild(deleteBtn);
         list.appendChild(project);
     }
     return list;
+}
+function deleteProject(i){
+    finalArray.splice(i,1);
+    if(finalArray.length == 0){
+        projectBeingDisplayed = {
+            title : "No Projects in task List",
+            description : "Create a Project to add tasks under it.",
+            tasks : []
+        }
+    }else{
+        projectBeingDisplayed = {
+            title : "Select a project.",
+            description : "Project Description will be shown here.",
+            tasks : []
+         }
+    }
+    DOMconstructor();
+}
+function addNewProject(){
+    const layer = document.createElement('div');
+    layer.classList.add("blurLayer");
+    layer.addEventListener('click',()=>{
+        layer.classList.add('hidden');
+        addLayer.classList.add('hidden')
+    })
+    const addLayer = document.createElement('div');
+    addLayer.id = "addLayer";
+    const title = document.createElement('input');
+    title.setAttribute('type','text');
+    title.setAttribute('placeholder','Name');
+    title.required = true;
+    const describe = document.createElement('input');
+    describe.required = true;
+    describe.setAttribute('type','text');
+    describe.setAttribute('placeholder','Describe the project')
+    const submit = document.createElement('input');
+    submit.setAttribute('type','submit');
+    submit.setAttribute('placeholder','Add Project');
+    submit.style.cssText = "background-color: gold;"
+    submit.addEventListener('click',()=>{
+        event.preventDefault();
+        if(title.value == "" || describe.value == ""){
+        }else{
+            let newProject = new projectConstructor(title.value,describe.value);
+            finalArray.push(newProject);
+            console.log(finalArray);
+            layer.classList.add('hidden');
+            addLayer.classList.add('hidden');
+            DOMconstructor();
+        }
+    })
+    const sub = document.createElement('form');
+    sub.classList.add('sub');
+    sub.appendChild(title);
+    sub.appendChild(describe);
+    sub.appendChild(submit);
+    addLayer.appendChild(sub);
+    const body = document.getElementsByTagName('BODY')[0];
+    body.appendChild(layer);
+    body.appendChild(addLayer);
+}
+function addNewTask(arg){
+    
 }
 
 export{ DOMconstructor as staticDOM};

@@ -4,45 +4,50 @@
 
 // Checks for already stored Data.
 function getFromLocalStorage(){
-    let sample = [
-        {
-            title: "TheOdinProject",
-            description: "Learn Web Development",
-            tasks: [
+    if(storageAvailable('localStorage')){
+        let project =  JSON.parse(localStorage.getItem('projectArray'));
+        if(!project){
+            return [
                 {
-                    title:"Create To-Do-List",
-                    date: "dd/mm/yyyy",
-                    detail: "Create using Javascript and Date-fns",
-                    time: "13:01"
+                    title: "TheOdinProject",
+                    description: "Learn Web Development",
+                    tasks: [
+                        {
+                            title:"Create To-Do-List",
+                            date: "dd/mm/yyyy",
+                            detail: "Create using Javascript and Date-fns",
+                            time: "13:01"
+                        }
+                    ]
                 }
-            ]
-        }
-    ];
-    let localStorage = function(){return (storageAvailable('localStorage') ? 1 : 0);};
-    if(localStorage == 1){
-        let projectArray =  JSON.parse(localStorage.getItem('projectArray'));
-        if(projectArray.length != 0){
-            return projectArray;
+            ];
         }else{
-            return sample;
+            return project;
         }
     }else{
-        return sample;
+        return [
+            {
+                title: "TheOdinProject",
+                description: "Learn Web Development",
+                tasks: [
+                    {
+                        title:"Create To-Do-List",
+                        date: "dd/mm/yyyy",
+                        detail: "Create using Javascript and Date-fns",
+                        time: "13:01"
+                    }
+                ]
+            }
+        ];
     }
 }
 function storeInLocalStorage(projectArray){
     localStorage.clear();
     localStorage.setItem('projectArray',JSON.stringify(projectArray));
-    console.log(projectArray);
 }
 // Stores task to Array and and push it to localStorage.
 function storeArray(arg){
 storeInLocalStorage(arg);
-}
-function updateArray(arg){
-let projectArray = taskInLocalStorage();
-projectArray.push(arg);
-storeInLocalStorage(projectArray);
 }
 
 //To check for local storage availability.
