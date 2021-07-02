@@ -46,6 +46,13 @@ body{
     justify-content: flex-start;
     align-items: center;
 }
+#leftPane .flexColumn{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
+    align-items: flex-start;
+}
 #leftPane .flexEnd:hover{
     outline: 2px solid whitesmoke;
 }
@@ -114,6 +121,7 @@ body{
     height: 100%;
     overflow: auto;
     margin-top: 2rem;
+    text-align: center;
 }
 .individualTaskContainer{
     display: flex;
@@ -148,4 +156,23 @@ body{
     border-radius: 20px;
     text-overflow: auto;
    word-wrap:break-word;
+}
+.hidden{
+    display: none !important;
+}
+.editTaskContainer{
+    display: flex;
+    flex-direction: column;
+    background: black;
+    border-radius: 20px;
+    padding: 2%;
+}
+#addTaskBtn{
+    width: 30%;
+    height: 2rem;
+    margin: 1%;
+    background-color: rgb(241, 77, 77);
+    border-radius: 5px;
+    border: none;
+    outline: 1px solid black
 }

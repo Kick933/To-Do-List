@@ -3,26 +3,48 @@
 
 
 // Checks for already stored Data.
-function taskInLocalStorage(){
+function getFromLocalStorage(){
+    let sample = [
+        {
+            title: "TheOdinProject",
+            description: "Learn Web Development",
+            tasks: [
+                {
+                    title:"Create To-Do-List",
+                    date: "dd/mm/yyyy",
+                    detail: "Create using Javascript and Date-fns",
+                    time: "13:01"
+                }
+            ]
+        }
+    ];
     let localStorage = function(){return (storageAvailable('localStorage') ? 1 : 0);};
     if(localStorage == 1){
         let projectArray =  JSON.parse(localStorage.getItem('projectArray'));
-        return projectArray;
+        if(projectArray.length != 0){
+            return projectArray;
+        }else{
+            return sample;
+        }
     }else{
-        return [];
+        return sample;
     }
 }
-function storeInLocalStorage(arg){
+function storeInLocalStorage(projectArray){
     localStorage.clear();
     localStorage.setItem('projectArray',JSON.stringify(projectArray));
     console.log(projectArray);
 }
 // Stores task to Array and and push it to localStorage.
 function storeArray(arg){
+storeInLocalStorage(arg);
+}
+function updateArray(arg){
 let projectArray = taskInLocalStorage();
 projectArray.push(arg);
 storeInLocalStorage(projectArray);
 }
+
 //To check for local storage availability.
 function storageAvailable(type) {
     var storage;
@@ -51,4 +73,4 @@ function storageAvailable(type) {
 // Use storeArray function to push new object to the array.
 // USe taskInLocalStorage to get Data to render in DOM.
 
-export { storeArray , taskInLocalStorage }
+export { storeArray , getFromLocalStorage }

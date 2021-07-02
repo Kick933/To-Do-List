@@ -5,33 +5,25 @@ import drop from './Images/drop.png';
 import add from './Images/add.png';
 import edit from './Images/edit.png';
 import deleteIMG from './Images/delete.png';
-
-// Temporary variables
-let project = {
-    title : "TheOdinProject",
-    description  : "Learn Web Development",
-    tasks : [
-        {
-        title : "Sample Text",
-        date : "dd/mm/yyyy",
-        detail : "Do something.",
-        time : "13:01"
-        }   
-]
-}
+import { storeArray, getFromLocalStorage } from './storageHandler.js';
+let projectBeingDisplayed;
+let indexOfProjectDisplayed;
+let finalArray = getFromLocalStorage();
 function DOMconstructor(){
     const body = document.getElementsByTagName("BODY")[0];
-
+    let selectedProject;
     // Creates Page Wrapper.
     const pageWrapper = document.createElement("div");
     pageWrapper.id = 'wrapper';
 
-    // Appending Left Pane to pageWrapper.
-    const leftPane = leftPaneConstructor();
-    pageWrapper.appendChild(leftPane);
-    // Appending Right Pane to pageWrapper.
 
-    const rightPane = rightPaneConstructor(project);
+    // Appending Left Pane to pageWrapper.
+    const leftPane = leftPaneConstructor(finalArray);
+    pageWrapper.appendChild(leftPane);
+
+
+    // Appending Left Pane to pageWrapper.
+    const rightPane = rightPaneConstructor(projectBeingDisplayed);
     pageWrapper.appendChild(rightPane);
 
     //Append pageWrapper to body;
@@ -39,7 +31,7 @@ function DOMconstructor(){
 }
 
 // Function to construct left Pane.
-function leftPaneConstructor(){
+function leftPaneConstructor(projectArray){
      //Temporarily create variables
      let totalTask = 0;
      let dueToday = 0;
@@ -49,6 +41,7 @@ function leftPaneConstructor(){
      // Creates left Pane.
      const leftPane = document.createElement("div");
      leftPane.id = 'leftPane';
+     leftPane.innerHTML = "";
      
  
      //Creates home option.
@@ -99,6 +92,9 @@ function leftPaneConstructor(){
      numProject.innerText = `${totalProjects}`;
      const dropdown = new Image();
      dropdown.src = drop;
+     dropdown.addEventListener('click', ()=>{
+         displayProjects.classList.toggle('hidden');
+     })
      dropdown.classList.add('enclosedIMG');
      optionProject.appendChild(textProject);
      container1.appendChild(numProject);
@@ -115,15 +111,20 @@ function leftPaneConstructor(){
      addBtn.classList.add('enclosedIMG');
      addProject.appendChild(textAddProject);
      addProject.appendChild(addBtn);
+     // Adds ProjectList to displayProjects.
+     const projectList = createProjectDOM(projectArray)
      // Adds add Projects Button to displayProjects.
      displayProjects.appendChild(addProject);
+     displayProjects.appendChild(projectList);
      leftPane.appendChild(displayProjects);
      return leftPane;
 }
-
+// Takes getFromLocalStorage as argument.
 function rightPaneConstructor(project){
+    console.log(project);
     const rightPane = document.createElement('div');
     rightPane.id='rightPane';
+    rightPane.innerHTML = "";
 
 
     // To show details of each project.
@@ -151,26 +152,31 @@ function rightPaneConstructor(project){
     rightPane.appendChild(projectDescription);
    
 
-    let arr = project.tasks;
     // function to render tasks.
-    const taskContainer = createTask(arr);
+    const taskContainer = createTaskDOM(project.tasks);
     rightPane.appendChild(taskContainer);
-
 
     return rightPane;
 }
 
-function createTask(arg){
+function createTaskDOM(arg){
     // Creating The task container.
     const taskContainer = document.createElement('div');
     taskContainer.id = "taskContainer";
 
+    const addTask = document.createElement('button');
+    addTask.innerText = "Add Task";
+    addTask.id="addTaskBtn";
+    addTask.addEventListener('click', ()=>{
+        addNewTask();
+    })
+    taskContainer.appendChild(addTask);
     for(let i = 0; i< arg.length ; i++){
         let currentTask = arg[i];
         // For individual container of each task.
         const individualContainer = document.createElement('div');
         individualContainer.classList.add('individualTaskContainer');
-        individualContainer.id=`${i}`;
+        individualContainer.id=`task${i}`;
 
         // Upper container of the task.
         const upperContainer = document.createElement('div');
@@ -186,7 +192,7 @@ function createTask(arg){
         editBtn.id=`${i}`;
         editBtn.classList.add('enclosedIMG');
         editBtn.addEventListener('click', ()=>{
-            editTask(project,i);
+            editTaskDOM(i);
         })
         const theFlex = document.createElement('div');
         theFlex.classList.add('flexAround');
@@ -197,7 +203,7 @@ function createTask(arg){
         deleteBtn.id=`${i};`
         deleteBtn.classList.add('enclosedIMG'); 
         deleteBtn.addEventListener('click',()=>{
-            deleteTask(project,i);
+            deleteTask(i);
         })
         const timeOfTask = document.createElement("div");
         timeOfTask.classList.add('time');
@@ -228,7 +234,99 @@ function createTask(arg){
 
 }
 
-function deleteTask(project,i){
+function deleteTask(i){
+    finalArray[indexOfProjectDisplayed].tasks.splice(i,1);
+    storeArray(finalArray);
+    DOMconstructor();
+}
+function editTaskDOM(i){
+    const individualContainer =  document.getElementById(`task${i}`);
+    individualContainer.innerHTML = "";
+    individualContainer.classList.remove('individualTaskContainer');
+    individualContainer.classList.add('editTaskContainer');
+    const container = document.createElement('form');
+    container.classList.add('editTaskContainer');
+    container.id=`taskedit${i}`;
+
+    // Upper container of the task.
+    const upperContainer = document.createElement('div');
+    upperContainer.classList.add('flexStretch');
+    // The name of task and edit and delete button are available in this part.
+    const taskName = document.createElement('input');
+    taskName.setAttribute('type','text');
+    taskName.setAttribute('placeholder','Task Name')
+    taskName.classList.add('inputText');
+    taskName.required = true;
+    // For edit Button.
+    const submit = document.createElement('input');
+    submit.setAttribute('type','submit');
+    submit.id = "taskSubmit";
+    submit.innerText = "Submit";
+    submit.addEventListener('click',()=>{
+        
+    })
+    
+    const theFlex = document.createElement('div');
+    theFlex.classList.add('flexAround');
+    
+    const timeOfTask = document.createElement("input");
+    timeOfTask.setAttribute('type','time');
+    timeOfTask.classList.add('time');
+    timeOfTask.required = true;
+
+    const dateOfTask = document.createElement("input");
+    dateOfTask.setAttribute('type','date');
+    dateOfTask.classList.add('date');
+    dateOfTask.required = true;
+
+    // Appending date and time and buttons.
+    theFlex.appendChild(timeOfTask);
+    theFlex.appendChild(dateOfTask);
+    theFlex.appendChild(submit);
+
+    upperContainer.appendChild(taskName);
+    upperContainer.appendChild(theFlex);
+    individualContainer.appendChild(upperContainer);
+    // Append task detail.
+    const para = document.createElement('input');
+    para.setAttribute('type','text');
+    para.required = true;
+    para.classList.add('taskDetail');
+    container.appendChild(para);
+    individualContainer.appendChild(container);
+}
+// Create deleteProject function.
+function createProjectDOM(arg){
+    const list = document.createElement('div');
+    list.classList.add('flexColumn');
+    for(let i=0; i<arg.length ; i++){
+        let currentProject = arg[i];
+        const project = document.createElement('div');
+        project.classList.add('flexEnd');
+        project.id=`project${i}`;
+        const projectName = document.createElement('div');
+        projectName.innerText = `${currentProject.title}`
+        const deleteBtn = new Image();
+        deleteBtn.classList.add('enclosedIMG');
+        deleteBtn.src = deleteIMG;
+        deleteBtn.addEventListener('click',()=>{
+            event.stopPropagation();
+            deleteproject(i);
+        });
+        if(i==0){
+            // Appending Right Pane to pageWrapper.
+            projectBeingDisplayed = arg[i];
+            indexOfProjectDisplayed = i;
+        }
+        project.addEventListener('click',()=>{
+            projectBeingDisplayed = arg[i];
+            indexOfProjectDisplayed = i;
+        })
+        project.appendChild(projectName);
+        project.appendChild(deleteBtn);
+        list.appendChild(project);
+    }
+    return list;
 }
 
 export{ DOMconstructor as staticDOM};
