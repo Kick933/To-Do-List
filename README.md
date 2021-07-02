@@ -8,5 +8,6 @@ Features-:
 
 
 Features planned to be added-:
-1. Adding Date Stamp to tasks.
-2. Adding Time stamp to tasks.
+1. time/date based sorting.
+2. Editing of individual task.
+3. Editing of Project title and description.
