@@ -2,6 +2,18 @@ body{
     background-color: #333333;
     color: #eeeeee;
 }
+input{
+    background-color: #000000;
+    color: whitesmoke;
+    border-radius: 2px;
+    border: none;
+    outline: 2px grey solid;
+    min-height: 2rem;
+}
+input[type = 'submit']{
+    background-color: rgb(46, 156, 46) !important;
+    
+}
 .enclosedIMG{
     height: 1.5rem;
     width: 1.5rem;
@@ -165,7 +177,8 @@ body{
     flex-direction: column;
     background: black;
     border-radius: 20px;
-    padding: 2%;
+    padding: 5%;
+    margin-top:2%;
 }
 #addTaskBtn{
     width: 30%;

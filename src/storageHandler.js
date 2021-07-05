@@ -13,10 +13,10 @@ function getFromLocalStorage(){
                     description: "Learn Web Development",
                     tasks: [
                         {
-                            title:"Create To-Do-List",
-                            date: "dd/mm/yyyy",
+                            taskTitle :"Create To-Do-List",
+                            date: "01/01/2021",
                             detail: "Create using Javascript and Date-fns",
-                            time: "13:01"
+                            time: "11:01"
                         }
                     ]
                 }

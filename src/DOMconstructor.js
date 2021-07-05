@@ -19,14 +19,21 @@ function projectConstructor(title,description){
         {
             date: "dd/mm/yyyy",
             detail: "It is a Sample task",
-            time : "13:01",
+            time : "11:01",
             taskTitle: "Sample Task"
         }
     ]
 }
+function taskConstructor(taskTitle,detail,date,time){
+    this.taskTitle= taskTitle,
+    this.detail= detail,
+    this.date= date,
+    this.time= time
+}
 
 function DOMconstructor(){
     const body = document.getElementsByTagName("BODY")[0];
+    body.innerHTML="";
     // Creates Page Wrapper.
     const pageWrapper = document.createElement("div");
     pageWrapper.id = 'wrapper';
@@ -59,18 +66,6 @@ function leftPaneConstructor(projectArray){
      const leftPane = document.createElement("div");
      leftPane.id = 'leftPane';
      leftPane.innerHTML = "";
-     
- 
-     //Creates home option.
-     const home = document.createElement('div');
-     home.classList.add("flexEnd");
-     const homeText = document.createElement('div');
-     homeText.innerText = "Home";
-     const numHomeTask = document.createElement('div');
-     numHomeTask.innerText = `${totalTask}`;
-     home.appendChild(homeText);
-     home.appendChild(numHomeTask);
-     leftPane.appendChild(home);
  
      // Creates Today option.
      const taskDueToday = document.createElement('div');
@@ -288,6 +283,7 @@ function deleteTask(i){
 }
 // Also used for addition of the task to project.
 function editTaskDOM(i){
+    const currentEditTask = finalArray[indexOfProjectDisplayed].tasks[i];
     const individualContainer =  document.getElementById(`task${i}`);
     individualContainer.innerHTML = "";
     individualContainer.classList.remove('individualTaskContainer');
@@ -302,16 +298,24 @@ function editTaskDOM(i){
     // The name of task and edit and delete button are available in this part.
     const taskName = document.createElement('input');
     taskName.setAttribute('type','text');
-    taskName.setAttribute('placeholder','Task Name')
+    taskName.setAttribute('value',`${currentEditTask.taskTitle}`)
     taskName.classList.add('inputText');
     taskName.required = true;
     // For edit Button.
-    const submit = document.createElement('input');
-    submit.setAttribute('type','submit');
-    submit.id = "taskSubmit";
-    submit.innerText = "Submit";
-    submit.addEventListener('click',()=>{
-        
+    const submitBtn = document.createElement('input');
+    submitBtn.setAttribute('type','submit');
+    submitBtn.setAttribute('value','Submit');
+    submitBtn.id = "taskSubmit";
+    submitBtn.addEventListener('click',()=>{
+        if(taskName.value == '' || para.value == '' || timeOfTask.value == '' || dateOfTask == ''){
+        }else{
+            // For Task Name edit
+            finalArray[indexOfProjectDisplayed].tasks[i].taskTitle = taskName.value;
+            finalArray[indexOfProjectDisplayed].tasks[i].date = dateOfTask.value;
+            finalArray[indexOfProjectDisplayed].tasks[i].time = timeOfTask.value;
+            finalArray[indexOfProjectDisplayed].tasks[i].detail = para.value;
+            DOMconstructor();
+        }
     })
     
     const theFlex = document.createElement('div');
@@ -319,18 +323,20 @@ function editTaskDOM(i){
     
     const timeOfTask = document.createElement("input");
     timeOfTask.setAttribute('type','time');
+    timeOfTask.setAttribute('value',`${currentEditTask.time}`);
     timeOfTask.classList.add('time');
     timeOfTask.required = true;
 
     const dateOfTask = document.createElement("input");
     dateOfTask.setAttribute('type','date');
+    dateOfTask.setAttribute('value',`${currentEditTask.date}`);
     dateOfTask.classList.add('date');
     dateOfTask.required = true;
 
     // Appending date and time and buttons.
     theFlex.appendChild(timeOfTask);
     theFlex.appendChild(dateOfTask);
-    theFlex.appendChild(submit);
+    theFlex.appendChild(submitBtn);
 
     upperContainer.appendChild(taskName);
     upperContainer.appendChild(theFlex);
@@ -338,6 +344,7 @@ function editTaskDOM(i){
     // Append task detail.
     const para = document.createElement('input');
     para.setAttribute('type','text');
+    para.setAttribute('value',`${currentEditTask.detail}`)
     para.required = true;
     para.classList.add('taskDetail');
     container.appendChild(para);
@@ -386,21 +393,15 @@ function createProjectDOM(arg){
 function deleteProject(i){
     finalArray.splice(i,1);
     if(finalArray.length == 0){
-        finalArray = [
-            {
-            title : "No Projects in task List",
-            description : "Create a Project to add tasks under it.",
-            tasks : []
-        }
-    ]
+        addNewProject();
     }else{
         projectBeingDisplayed = {
             title : "Select a project.",
             description : "Project Description will be shown here.",
             tasks : []
          }
-    }
     DOMconstructor();
+    }
 }
 function addNewProject(){
     const layer = document.createElement('div');
@@ -427,8 +428,7 @@ function addNewProject(){
     projDescribe.setAttribute('placeholder','Describe the project')
     const submitBtn = document.createElement('input');
     submitBtn.setAttribute('type','submit');
-    submitBtn.setAttribute('text','Add Project');
-    submitBtn.style.cssText = "background-color: gold;"
+    submitBtn.setAttribute('value','Add Project');
     submitBtn.addEventListener('click',()=>{
         event.preventDefault();
         if(projTitle.value == "" || projDescribe.value == ""){
@@ -450,7 +450,79 @@ function addNewProject(){
     body.appendChild(addLayer);
 }
 function addNewTask(arg){
+    const aContainer =  document.createElement('form');
+    aContainer.id = `${arg.length}`;
+    aContainer.classList.remove('individualTaskContainer');
+    aContainer.classList.add('editTaskContainer');
+    const container = document.createElement('form');
+    container.classList.add('editTaskContainer');
+
+    // Upper container of the task.
+    const upperContainer = document.createElement('div');
+    upperContainer.classList.add('flexStretch');
+    // The name of task and edit and delete button are available in this part.
+    const taskName = document.createElement('input');
+    taskName.setAttribute('type','text');
+    taskName.setAttribute('placeholder','Name of Task')
+    taskName.classList.add('inputText');
+    taskName.required = true;
+    // For edit Button.
+    const submitBtn = document.createElement('input');
+    submitBtn.setAttribute('type','submit');
+    submitBtn.setAttribute('value','Submit');
+    submitBtn.id = "taskSubmit";
+    submitBtn.addEventListener('click',()=>{
+        if(taskName.value == '' || para.value == '' || timeOfTask.value == '' || dateOfTask.value == ''){
+        }else{
+            // For Task Name edit
+            const newTask = new taskConstructor(taskName.value,para.value,dateOfTask.value,dateOfTask.value)
+            console.log(newTask)
+            finalArray[indexOfProjectDisplayed].tasks.push(newTask);
+            DOMconstructor();
+        }
+    })
+    const cancelBtn = document.createElement('button');
+    cancelBtn.innerText = "Cancel";
+    cancelBtn.addEventListener('click',()=>{
+        aContainer.remove();
+    })  
     
+    const theFlex = document.createElement('div');
+    theFlex.classList.add('flexAround');
+    
+    const timeOfTask = document.createElement("input");
+    timeOfTask.setAttribute('type','time');
+    timeOfTask.setAttribute('value','hh:mm AM');
+    timeOfTask.classList.add('time');
+    timeOfTask.required = true;
+
+    const dateOfTask = document.createElement("input");
+    dateOfTask.setAttribute('type','date');
+    dateOfTask.setAttribute('value','01/01/2021');
+    dateOfTask.classList.add('date');
+    dateOfTask.required = true;
+
+    // Appending date and time and buttons.
+    theFlex.appendChild(timeOfTask);
+    theFlex.appendChild(dateOfTask);
+    theFlex.appendChild(submitBtn);
+
+    upperContainer.appendChild(taskName);
+    upperContainer.appendChild(theFlex);
+    aContainer.appendChild(upperContainer);
+    // Append task detail.
+    const para = document.createElement('input');
+    para.setAttribute('type','text');
+    para.setAttribute('value','Details of The Task');
+    para.required = true;
+    para.classList.add('taskDetail');
+    para.style.width="50%";
+    container.appendChild(para);
+    container.appendChild(cancelBtn);
+    container.classList.add('flexAround');
+    container.style.width = "90% !important";
+    aContainer.appendChild(container);
+    document.getElementById('taskContainer').appendChild(aContainer);
 }
 function editProject(i){
     const layer = document.createElement('div');
@@ -478,7 +550,6 @@ function editProject(i){
     const submitBtn = document.createElement('input');
     submitBtn.setAttribute('type','submit');
     submitBtn.setAttribute('placeholder','Edit Project');
-    submitBtn.style.cssText = "background-color: gold;"
     submitBtn.addEventListener('click',()=>{
         event.preventDefault();
         if(titleOfProject.value === '' || describe.value === ''){
