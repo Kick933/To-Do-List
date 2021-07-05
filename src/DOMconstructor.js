@@ -6,17 +6,25 @@ import add from './Images/add.png';
 import edit from './Images/edit.png';
 import deleteIMG from './Images/delete.png';
 import { storeArray, getFromLocalStorage } from './storageHandler.js';
+
 let projectBeingDisplayed = 0;
 let indexOfProjectDisplayed;
 let finalArray = [];
 finalArray = getFromLocalStorage();
-
 // Project object Constructor.
-function projectConstructor(title,describe){
+function projectConstructor(title,description){
     this.title = title;
-    this.describe = describe;
-    this.tasks = [];
+    this.description = description;
+    this.tasks = [
+        {
+            date: "dd/mm/yyyy",
+            detail: "It is a Sample task",
+            time : "13:01",
+            taskTitle: "Sample Task"
+        }
+    ]
 }
+
 function DOMconstructor(){
     const body = document.getElementsByTagName("BODY")[0];
     // Creates Page Wrapper.
@@ -44,8 +52,8 @@ function leftPaneConstructor(projectArray){
      //Temporarily create variables
      let totalTask = 0;
      let dueToday = 0;
-     let dueThisWeek = 0;
-     let totalProjects = 0;
+     let dueThisWeek = 0; 
+     let totalProjects = projectArray.length;
      /////////////////////////////
      // Creates left Pane.
      const leftPane = document.createElement("div");
@@ -134,7 +142,6 @@ function leftPaneConstructor(projectArray){
 // Takes getFromLocalStorage as argument.
 function rightPaneConstructor(project){
     const rightPane = document.createElement('div');
-    console.log(project);
     rightPane.id='rightPane';
     rightPane.innerHTML = "";
 
@@ -164,8 +171,11 @@ function rightPaneConstructor(project){
     }else{
         editIMG.classList.remove('hidden');
     }
-    editIMG.src = edit
+    editIMG.src = edit;
     editIMG.classList.add("enclosedIMG");
+    editIMG.addEventListener('click',()=>{
+        editProject(indexOfProjectDisplayed);
+    });
     headingpart.appendChild(editIMG);
     projectDescription.appendChild(headingpart);
 
@@ -222,7 +232,7 @@ function createTaskDOM(arg){
         upperContainer.id=`${i}`;
         // The name of task and edit and delete button are available in this part.
         const taskName = document.createElement('h2');
-        taskName.innerText = `${currentTask.title}`;
+        taskName.innerText = `${currentTask.taskTitle}`;
         taskName.classList.add('taskName');
         // For edit Button.
         const editBtn = new Image();
@@ -334,9 +344,13 @@ function editTaskDOM(i){
     individualContainer.appendChild(container);
 }
 // Create deleteProject function.
-function createProjectDOM(arg){
+function createProjectDOM(arg){ 
     const list = document.createElement('div');
     list.classList.add('flexColumn');
+    if(arg.length == 0){
+        return;
+    }
+    else{
     for(let i=0; i<arg.length ; i++){
         let currentProject = arg[i];
         const project = document.createElement('div');
@@ -364,17 +378,21 @@ function createProjectDOM(arg){
         project.appendChild(projectName);
         project.appendChild(deleteBtn);
         list.appendChild(project);
-    }
+        }
+
     return list;
+    }
 }
 function deleteProject(i){
     finalArray.splice(i,1);
     if(finalArray.length == 0){
-        projectBeingDisplayed = {
+        finalArray = [
+            {
             title : "No Projects in task List",
             description : "Create a Project to add tasks under it.",
             tasks : []
         }
+    ]
     }else{
         projectBeingDisplayed = {
             title : "Select a project.",
@@ -388,40 +406,44 @@ function addNewProject(){
     const layer = document.createElement('div');
     layer.classList.add("blurLayer");
     layer.addEventListener('click',()=>{
-        layer.classList.add('hidden');
-        addLayer.classList.add('hidden')
+        layer.remove();
+        addLayer.remove();
     })
     const addLayer = document.createElement('div');
     addLayer.id = "addLayer";
-    const title = document.createElement('input');
-    title.setAttribute('type','text');
-    title.setAttribute('placeholder','Name');
-    title.required = true;
-    const describe = document.createElement('input');
-    describe.required = true;
-    describe.setAttribute('type','text');
-    describe.setAttribute('placeholder','Describe the project')
-    const submit = document.createElement('input');
-    submit.setAttribute('type','submit');
-    submit.setAttribute('placeholder','Add Project');
-    submit.style.cssText = "background-color: gold;"
-    submit.addEventListener('click',()=>{
+
+
+    const sub = document.createElement('form');
+    sub.classList.add('sub');
+
+
+    const projTitle = document.createElement('input');
+    projTitle.setAttribute('type','text');
+    projTitle.setAttribute('placeholder','Name');
+    projTitle.required = true;
+    const projDescribe = document.createElement('input');
+    projDescribe.required = true;
+    projDescribe.setAttribute('type','text');
+    projDescribe.setAttribute('placeholder','Describe the project')
+    const submitBtn = document.createElement('input');
+    submitBtn.setAttribute('type','submit');
+    submitBtn.setAttribute('text','Add Project');
+    submitBtn.style.cssText = "background-color: gold;"
+    submitBtn.addEventListener('click',()=>{
         event.preventDefault();
-        if(title.value == "" || describe.value == ""){
+        if(projTitle.value == "" || projDescribe.value == ""){
         }else{
-            let newProject = new projectConstructor(title.value,describe.value);
+            let newProject = new projectConstructor(projTitle.value,projDescribe.value);
             finalArray.push(newProject);
-            console.log(finalArray);
-            layer.classList.add('hidden');
-            addLayer.classList.add('hidden');
+            layer.remove();
+            addLayer.remove();
             DOMconstructor();
         }
     })
-    const sub = document.createElement('form');
-    sub.classList.add('sub');
-    sub.appendChild(title);
-    sub.appendChild(describe);
-    sub.appendChild(submit);
+    
+    sub.appendChild(projTitle);
+    sub.appendChild(projDescribe);
+    sub.appendChild(submitBtn);
     addLayer.appendChild(sub);
     const body = document.getElementsByTagName('BODY')[0];
     body.appendChild(layer);
@@ -429,6 +451,53 @@ function addNewProject(){
 }
 function addNewTask(arg){
     
+}
+function editProject(i){
+    const layer = document.createElement('div');
+    layer.classList.add("blurLayer");
+    layer.addEventListener('click',()=>{
+        layer.classList.add('hidden');
+        addLayer.classList.add('hidden')
+    })
+    const addLayer = document.createElement('div');
+    addLayer.id = "addLayer";
+
+
+    const sub = document.createElement('form');
+    sub.classList.add('sub');
+
+
+    const titleOfProject = document.createElement('input');
+    titleOfProject.setAttribute('type','text');
+    titleOfProject.setAttribute('placeholder',`${finalArray[i].title}`);
+    titleOfProject.required = true;
+    const describe = document.createElement('input');
+    describe.required = true;
+    describe.setAttribute('type','text');
+    describe.setAttribute('placeholder',`${finalArray[i].description}`)
+    const submitBtn = document.createElement('input');
+    submitBtn.setAttribute('type','submit');
+    submitBtn.setAttribute('placeholder','Edit Project');
+    submitBtn.style.cssText = "background-color: gold;"
+    submitBtn.addEventListener('click',()=>{
+        event.preventDefault();
+        if(titleOfProject.value === '' || describe.value === ''){
+        }else{
+            finalArray[i].title = titleOfProject.value;
+            finalArray[i].description = describe.value;
+            layer.remove();
+            addLayer.remove();
+            DOMconstructor();
+        }
+    })
+    
+    sub.appendChild(titleOfProject);
+    sub.appendChild(describe);
+    sub.appendChild(submitBtn);
+    addLayer.appendChild(sub);
+    const body = document.getElementsByTagName('BODY')[0];
+    body.appendChild(layer);
+    body.appendChild(addLayer);
 }
 
 export{ DOMconstructor as staticDOM};
