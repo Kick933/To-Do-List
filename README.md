@@ -2,7 +2,7 @@
 
 This is a To-Do-List to organise your tasks. A Project for **The Odin Project**.
 
-##Features-:
+## Features-:
 1. Create tasks.
 2. Create taks under PROJECTS sub-heading.
 3. Sort tasks by time.
