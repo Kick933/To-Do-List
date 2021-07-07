@@ -8,7 +8,7 @@ This is a To-Do-List to organise your tasks. A Project for **The Odin Project**.
 3. Sort tasks by time.
 4. Sort tasks by priority assigned.
 
-Features planned to be added-:
+## Features planned to be added-:
 - [] time based sorting.
 - [x] Editing of individual task.
 - [x] Editing of Project title and description.
